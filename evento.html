@@ -35,8 +35,8 @@
       margin-top: 4px;
     }
 
-    /* ── File bar ── */
-    .file-bar {
+    /* ── Storage bar ── */
+    .storage-bar {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
@@ -52,22 +52,20 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #e94560;
+      background: #2ecc71;
       flex-shrink: 0;
-      transition: background 0.3s;
     }
-    .dot.connected { background: #2ecc71; }
 
-    .file-name {
+    .storage-info {
       flex: 1;
       font-size: 0.9rem;
       color: #aaa;
-      min-width: 120px;
     }
 
-    .file-status {
-      font-size: 0.8rem;
+    .storage-info span {
       color: #666;
+      font-size: 0.8rem;
+      margin-left: 8px;
     }
 
     /* ── Buttons ── */
@@ -83,8 +81,9 @@
     button:hover { opacity: 0.85; }
     button:active { transform: scale(0.97); }
 
-    .btn-primary { background: #e94560; color: #fff; }
+    .btn-primary   { background: #e94560; color: #fff; }
     .btn-secondary { background: rgba(255,255,255,0.1); color: #e0e0e0; }
+    .btn-ghost     { background: rgba(255,255,255,0.06); color: #aaa; }
     .btn-danger {
       background: rgba(233,69,96,0.2);
       color: #e94560;
@@ -110,7 +109,6 @@
       border-radius: 12px;
       padding: 16px;
       text-align: center;
-      transition: opacity 0.3s;
     }
 
     .stat-label {
@@ -122,7 +120,7 @@
     }
 
     .stat-value { font-size: 1.8rem; font-weight: 700; }
-    .stat-total    .stat-value { color: #a29bfe; }
+    .stat-total     .stat-value { color: #a29bfe; }
     .stat-confirmed .stat-value { color: #2ecc71; }
     .stat-pending   .stat-value { color: #f39c12; }
     .stat-collected .stat-value { color: #e94560; font-size: 1.3rem; }
@@ -134,12 +132,6 @@
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 20px;
-      transition: opacity 0.3s;
-    }
-
-    .locked {
-      opacity: 0.4;
-      pointer-events: none;
     }
 
     .section-title {
@@ -294,7 +286,7 @@
       margin-top: 16px;
     }
     .recaudado-formula { font-size: 0.85rem; color: #aaa; margin-bottom: 4px; }
-    .recaudado-total { font-size: 1.5rem; font-weight: 700; color: #e94560; }
+    .recaudado-total   { font-size: 1.5rem; font-weight: 700; color: #e94560; }
 
     /* ── Insumos subsection ── */
     .insumos-sub {
@@ -339,6 +331,12 @@
       font-size: 0.85rem;
       padding: 20px;
     }
+
+    /* ── Danger zone ── */
+    .danger-zone {
+      margin-top: 8px;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
@@ -348,37 +346,41 @@
     <p>Organizador de Eventos</p>
   </header>
 
-  <!-- File bar -->
-  <div class="file-bar" id="file-bar">
-    <div class="dot" id="dot"></div>
-    <span class="file-name" id="file-name">Sin archivo conectado</span>
-    <span class="file-status" id="file-status">Auto-guardado inactivo</span>
-    <button class="btn-primary btn-small" id="btn-connect">Conectar</button>
+  <!-- Storage bar -->
+  <div class="storage-bar">
+    <div class="dot"></div>
+    <span class="storage-info">
+      Guardado en este navegador
+      <span id="last-saved"></span>
+    </span>
+    <button class="btn-ghost btn-small" id="btn-export">&#x2193; Exportar</button>
+    <button class="btn-ghost btn-small" id="btn-import">&#x2191; Importar</button>
+    <input type="file" id="input-import" accept=".json" style="display:none">
   </div>
 
   <!-- Stats -->
   <div class="stats-grid">
-    <div class="stat-card stat-total locked" id="sc-total">
+    <div class="stat-card stat-total">
       <div class="stat-label">Total</div>
       <div class="stat-value" id="stat-total">0</div>
     </div>
-    <div class="stat-card stat-confirmed locked" id="sc-confirmed">
+    <div class="stat-card stat-confirmed">
       <div class="stat-label">Confirmados</div>
       <div class="stat-value" id="stat-confirmed">0</div>
     </div>
-    <div class="stat-card stat-pending locked" id="sc-pending">
+    <div class="stat-card stat-pending">
       <div class="stat-label">Pendientes</div>
       <div class="stat-value" id="stat-pending">0</div>
     </div>
-    <div class="stat-card stat-collected locked" id="sc-collected">
+    <div class="stat-card stat-collected">
       <div class="stat-label">Recaudado</div>
       <div class="stat-value" id="stat-collected">$0</div>
     </div>
   </div>
 
-  <!-- Guests section -->
-  <div class="section-card locked" id="guests-section">
-    <div class="section-title">👥 Invitados</div>
+  <!-- Guests -->
+  <div class="section-card" id="guests-section">
+    <div class="section-title">&#x1F465; Invitados</div>
     <div class="add-row">
       <input type="text" id="new-guest" placeholder="Nombre del invitado...">
       <button class="btn-primary btn-small" id="btn-add-guest">+ Agregar</button>
@@ -386,9 +388,9 @@
     <div class="guest-list" id="guest-list"></div>
   </div>
 
-  <!-- Config section -->
-  <div class="section-card locked" id="config-section">
-    <div class="section-title">⚙️ Configuración</div>
+  <!-- Config -->
+  <div class="section-card" id="config-section">
+    <div class="section-title">&#x2699;&#xFE0F; Configuraci&#xF3;n</div>
     <div class="config-grid">
       <div class="config-field">
         <label class="config-label">Nombre del Evento</label>
@@ -404,7 +406,7 @@
       </div>
       <div class="config-field">
         <label class="config-label">Lugar</label>
-        <input type="text" class="config-input" id="cfg-lugar" placeholder="Dirección o lugar">
+        <input type="text" class="config-input" id="cfg-lugar" placeholder="Direcci&#xF3;n o lugar">
       </div>
       <div class="config-field full-width">
         <label class="config-label">Notas</label>
@@ -412,20 +414,24 @@
       </div>
     </div>
 
-    <!-- Recaudado -->
     <div class="recaudado-box">
-      <div class="recaudado-formula" id="recaudado-formula">0 confirmados × $0</div>
+      <div class="recaudado-formula" id="recaudado-formula">0 confirmados &times; $0</div>
       <div class="recaudado-total" id="recaudado-total">$0</div>
     </div>
 
-    <!-- Insumos subsection -->
+    <!-- Insumos -->
     <div class="insumos-sub">
-      <div class="section-title">📦 Insumos</div>
+      <div class="section-title">&#x1F4E6; Insumos</div>
       <div class="add-row">
         <input type="text" id="new-insumo" placeholder="Nombre del insumo...">
         <button class="btn-primary btn-small" id="btn-add-insumo">+ Agregar</button>
       </div>
       <div class="insumo-list" id="insumo-list"></div>
+    </div>
+
+    <!-- Borrar todo -->
+    <div class="danger-zone">
+      <button class="btn-danger" id="btn-reset">&#x1F5D1; Borrar todo</button>
     </div>
   </div>
 
@@ -433,46 +439,28 @@
 
   <script>
     // ══════════════════════════════════════════
-    // IndexedDB — persistencia del file handle
+    // localStorage
     // ══════════════════════════════════════════
-    const DB_NAME    = 'HeinbergoDB';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'handles';
-    const HANDLE_KEY = 'fileHandle';
+    const LS_KEY = 'heinbergo_data';
 
-    function openDB() {
-      return new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, DB_VERSION);
-        req.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME);
-        req.onsuccess = e => resolve(e.target.result);
-        req.onerror   = e => reject(e.target.error);
-      });
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (_) { return null; }
     }
 
-    async function saveHandle(handle) {
-      const db = await openDB();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        tx.objectStore(STORE_NAME).put(handle, HANDLE_KEY);
-        tx.oncomplete = resolve;
-        tx.onerror    = e => reject(e.target.error);
-      });
-    }
-
-    async function loadHandle() {
-      const db = await openDB();
-      return new Promise((resolve, reject) => {
-        const tx  = db.transaction(STORE_NAME, 'readonly');
-        const req = tx.objectStore(STORE_NAME).get(HANDLE_KEY);
-        req.onsuccess = e => resolve(e.target.result || null);
-        req.onerror   = e => reject(e.target.error);
-      });
+    function saveData() {
+      localStorage.setItem(LS_KEY, JSON.stringify(appData));
+      const now = new Date();
+      document.getElementById('last-saved').textContent =
+        '· guardado ' + now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
     }
 
     // ══════════════════════════════════════════
-    // Estado de la app
+    // Estado
     // ══════════════════════════════════════════
-    let fileHandle = null;
     let appData = {
       guests:  [],
       config:  { evento: '', fecha: '', importe: '', lugar: '', notas: '' },
@@ -480,80 +468,12 @@
     };
 
     // ══════════════════════════════════════════
-    // parseMD / buildMD
-    // ══════════════════════════════════════════
-    function parseMD(text) {
-      const data = {
-        guests:  [],
-        config:  { evento: '', fecha: '', importe: '', lugar: '', notas: '' },
-        insumos: []
-      };
-      let section = null;
-
-      for (const raw of text.split('\n')) {
-        const line = raw.trimEnd();
-        if (line.startsWith('# Invitados')) { section = 'guests';  continue; }
-        if (line.startsWith('# Config'))    { section = 'config';  continue; }
-        if (line.startsWith('# Insumos'))   { section = 'insumos'; continue; }
-
-        if (section === 'guests') {
-          const m = line.match(/^- \[( |x)\] (.+)$/);
-          if (m) data.guests.push({ name: m[2].trim(), checked: m[1] === 'x' });
-        } else if (section === 'config') {
-          const m = line.match(/^(\w+): (.*)$/);
-          if (m && Object.prototype.hasOwnProperty.call(data.config, m[1])) {
-            data.config[m[1]] = m[2].trim();
-          }
-        } else if (section === 'insumos') {
-          const m = line.match(/^- \[(\d*)\] (.+)$/);
-          if (m) data.insumos.push({ name: m[2].trim(), qty: m[1] });
-        }
-      }
-      return data;
-    }
-
-    function buildMD(data) {
-      const lines = ['# Invitados'];
-      for (const g of data.guests)
-        lines.push(`- [${g.checked ? 'x' : ' '}] ${g.name}`);
-
-      lines.push('# Config');
-      for (const key of ['evento', 'fecha', 'importe', 'lugar', 'notas'])
-        lines.push(`${key}: ${data.config[key] || ''}`);
-
-      lines.push('# Insumos');
-      for (const ins of data.insumos)
-        lines.push(`- [${ins.qty || '0'}] ${ins.name}`);
-
-      return lines.join('\n') + '\n';
-    }
-
-    // ══════════════════════════════════════════
-    // File operations
-    // ══════════════════════════════════════════
-    async function saveFile() {
-      if (!fileHandle) return;
-      try {
-        const writable = await fileHandle.createWritable();
-        await writable.write(buildMD(appData));
-        await writable.close();
-      } catch (e) {
-        showToast('Error al guardar: ' + e.message);
-      }
-    }
-
-    async function readFile() {
-      const file = await fileHandle.getFile();
-      return file.text();
-    }
-
-    // ══════════════════════════════════════════
     // Render
     // ══════════════════════════════════════════
     function renderGuests() {
       const list = document.getElementById('guest-list');
       if (appData.guests.length === 0) {
-        list.innerHTML = '<div class="empty-state">No hay invitados aún</div>';
+        list.innerHTML = '<div class="empty-state">No hay invitados a&#xFA;n</div>';
         return;
       }
       list.innerHTML = appData.guests.map((g, i) => `
@@ -564,7 +484,7 @@
               onchange="toggleGuest(${i}, this.checked)">
             <span class="checkmark"></span>
           </label>
-          <button class="btn-danger" onclick="removeGuest(${i})">✕</button>
+          <button class="btn-danger" onclick="removeGuest(${i})">&#x2715;</button>
         </div>
       `).join('');
     }
@@ -572,7 +492,7 @@
     function renderInsumos() {
       const list = document.getElementById('insumo-list');
       if (appData.insumos.length === 0) {
-        list.innerHTML = '<div class="empty-state">No hay insumos aún</div>';
+        list.innerHTML = '<div class="empty-state">No hay insumos a&#xFA;n</div>';
         return;
       }
       list.innerHTML = appData.insumos.map((ins, i) => `
@@ -580,7 +500,7 @@
           <span class="insumo-name">${esc(ins.name)}</span>
           <input type="number" class="insumo-qty" value="${esc(ins.qty)}" min="0"
             oninput="updateInsumoQty(${i}, this.value)">
-          <button class="btn-danger" onclick="removeInsumo(${i})">✕</button>
+          <button class="btn-danger" onclick="removeInsumo(${i})">&#x2715;</button>
         </div>
       `).join('');
     }
@@ -598,7 +518,7 @@
       document.getElementById('stat-collected').textContent = fmtCurrency(collected);
 
       document.getElementById('recaudado-formula').textContent =
-        `${confirmed} confirmados × $${importe.toLocaleString('es-AR')}`;
+        `${confirmed} confirmados \u00d7 $${importe.toLocaleString('es-AR')}`;
       document.getElementById('recaudado-total').textContent = fmtCurrency(collected);
     }
 
@@ -616,17 +536,18 @@
     }
 
     // ══════════════════════════════════════════
-    // Acciones de usuario
+    // Acciones
     // ══════════════════════════════════════════
     function toggleGuest(i, checked) {
       appData.guests[i].checked = checked;
-      saveFile().then(() => renderAll());
+      saveData(); renderAll();
     }
 
     function removeGuest(i) {
       const name = appData.guests[i].name;
       appData.guests.splice(i, 1);
-      saveFile().then(() => { renderAll(); showToast(`"${name}" eliminado`); });
+      saveData(); renderAll();
+      showToast(`"${name}" eliminado`);
     }
 
     function addGuest() {
@@ -638,7 +559,8 @@
       }
       appData.guests.push({ name, checked: false });
       input.value = '';
-      saveFile().then(() => { renderAll(); showToast(`"${name}" agregado`); });
+      saveData(); renderAll();
+      showToast(`"${name}" agregado`);
     }
 
     function addInsumo() {
@@ -647,26 +569,27 @@
       if (!name) return;
       appData.insumos.push({ name, qty: '0' });
       input.value = '';
-      saveFile().then(() => { renderAll(); showToast(`"${name}" agregado`); });
+      saveData(); renderAll();
+      showToast(`"${name}" agregado`);
     }
 
     function removeInsumo(i) {
       const name = appData.insumos[i].name;
       appData.insumos.splice(i, 1);
-      saveFile().then(() => { renderAll(); showToast(`"${name}" eliminado`); });
+      saveData(); renderAll();
+      showToast(`"${name}" eliminado`);
     }
 
     function updateInsumoQty(i, value) {
       appData.insumos[i].qty = value;
-      saveFile();
+      saveData(); updateStats();
     }
 
-    // Config: guardar en tiempo real
+    // Config en tiempo real
     ['evento', 'fecha', 'importe', 'lugar', 'notas'].forEach(k => {
       document.getElementById('cfg-' + k).addEventListener('input', function () {
         appData.config[k] = this.value;
-        saveFile();
-        updateStats();
+        saveData(); updateStats();
       });
     });
 
@@ -676,114 +599,67 @@
     document.getElementById('btn-add-guest').addEventListener('click',  addGuest);
     document.getElementById('btn-add-insumo').addEventListener('click', addInsumo);
 
+    // Borrar todo
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (!confirm('\u00bfBorrar todos los datos? Esta acci\u00f3n no se puede deshacer.')) return;
+      appData = {
+        guests:  [],
+        config:  { evento: '', fecha: '', importe: '', lugar: '', notas: '' },
+        insumos: []
+      };
+      saveData(); renderAll();
+      showToast('Datos borrados');
+    });
+
     // ══════════════════════════════════════════
-    // Conexión del archivo
+    // Exportar / Importar JSON
     // ══════════════════════════════════════════
-    function unlock() {
-      ['guests-section', 'config-section',
-       'sc-total', 'sc-confirmed', 'sc-pending', 'sc-collected'].forEach(id => {
-        document.getElementById(id).classList.remove('locked');
-      });
-    }
+    document.getElementById('btn-export').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      const name = (appData.config.evento || 'heinbergo') + '.json';
+      a.href = url;
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Exportado: ' + name);
+    });
 
-    function lock() {
-      ['guests-section', 'config-section',
-       'sc-total', 'sc-confirmed', 'sc-pending', 'sc-collected'].forEach(id => {
-        document.getElementById(id).classList.add('locked');
-      });
-    }
+    document.getElementById('btn-import').addEventListener('click', () => {
+      document.getElementById('input-import').click();
+    });
 
-    function setConnected(handle) {
-      fileHandle = handle;
-      document.getElementById('dot').classList.add('connected');
-      document.getElementById('file-name').textContent  = handle.name;
-      document.getElementById('file-status').textContent = 'Auto-guardado activo';
-      document.getElementById('btn-connect').textContent = 'Cambiar';
-      unlock();
-    }
-
-    async function connectFile(existingHandle = null) {
-      try {
-        let handle = existingHandle;
-
-        if (!handle) {
-          try {
-            [handle] = await window.showOpenFilePicker({
-              types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }],
-              multiple: false
-            });
-          } catch (e) {
-            if (e.name === 'AbortError') {
-              if (!confirm('¿Crear un nuevo archivo guests.md?')) return;
-              handle = await window.showSaveFilePicker({
-                suggestedName: 'guests.md',
-                types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }]
-              });
-              const w = await handle.createWritable();
-              await w.write(buildMD(appData));
-              await w.close();
-            } else {
-              throw e;
-            }
-          }
+    document.getElementById('input-import').addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported.guests || !imported.config || !imported.insumos)
+            throw new Error('Formato incorrecto');
+          appData = imported;
+          saveData(); renderAll();
+          showToast('Importado: ' + file.name);
+        } catch (err) {
+          showToast('Error al importar: ' + err.message);
         }
-
-        // Verificar / solicitar permiso
-        const perm = await handle.queryPermission({ mode: 'readwrite' });
-        if (perm !== 'granted') {
-          const req = await handle.requestPermission({ mode: 'readwrite' });
-          if (req !== 'granted') { showToast('Permiso denegado'); return; }
-        }
-
-        await saveHandle(handle);
-        setConnected(handle);
-        appData = parseMD(await readFile());
-        renderAll();
-        showToast('Archivo conectado: ' + handle.name);
-
-      } catch (e) {
-        showToast('Error: ' + e.message);
-      }
-    }
-
-    document.getElementById('btn-connect').addEventListener('click', () => connectFile());
-
-    // ══════════════════════════════════════════
-    // Auto-reconexión al cargar
-    // ══════════════════════════════════════════
-    async function tryAutoReconnect() {
-      try {
-        const handle = await loadHandle();
-        if (!handle) return;
-
-        const perm = await handle.queryPermission({ mode: 'readwrite' });
-        if (perm === 'granted') {
-          setConnected(handle);
-          appData = parseMD(await readFile());
-          renderAll();
-          showToast('Archivo reconectado automáticamente');
-        } else {
-          // Permiso expirado: mostrar botón Reconectar
-          document.getElementById('file-name').textContent = handle.name + ' (permiso expirado)';
-          const btn = document.createElement('button');
-          btn.className   = 'btn-secondary btn-small';
-          btn.textContent = 'Reconectar';
-          btn.addEventListener('click', () => { btn.remove(); connectFile(handle); });
-          document.getElementById('file-bar').appendChild(btn);
-        }
-      } catch (_) { /* fallo silencioso */ }
-    }
+      };
+      reader.readAsText(file);
+      this.value = '';
+    });
 
     // ══════════════════════════════════════════
     // Utils
     // ══════════════════════════════════════════
     function showToast(msg) {
-      const c     = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className   = 'toast';
-      toast.textContent = msg;
-      c.appendChild(toast);
-      setTimeout(() => toast.remove(), 3100);
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className   = 'toast';
+      t.textContent = msg;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3100);
     }
 
     function fmtCurrency(v) {
@@ -801,7 +677,9 @@
     // ══════════════════════════════════════════
     // Init
     // ══════════════════════════════════════════
-    tryAutoReconnect();
+    const saved = loadData();
+    if (saved) appData = saved;
+    renderAll();
   </script>
 </body>
 </html>
