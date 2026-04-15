@@ -7,38 +7,89 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --cempasuchil: #FF9500;
+      --rosa:        #E91E8C;
+      --verde:       #00A651;
+      --azul:        #1565C0;
+      --rojo:        #C62828;
+      --amarillo:    #FFD100;
+      --morado:      #7B1FA2;
+      --text:        #f5e6d0;
+      --text-muted:  #a08060;
+    }
+
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(135deg, #0d0d1a 0%, #0f2027 100%);
+      background: linear-gradient(160deg, #2d0a00 0%, #1a0800 55%, #0d0500 100%);
       min-height: 100vh;
-      color: #e0e0e0;
+      color: var(--text);
       padding: 20px;
     }
 
+    /* ── Header ── */
     header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 10px;
     }
 
     header h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, #e94560, #f39c12);
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--cempasuchil), var(--rosa));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: -0.5px;
     }
 
     header p {
-      color: #888;
-      font-size: 0.95rem;
-      margin-top: 4px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    /* ── Papel picado ── */
+    .papel-picado {
+      width: 100%;
+      height: 30px;
+      margin: 16px 0 24px;
+      overflow: hidden;
+    }
+    .papel-picado::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--rosa)        0,          var(--rosa)        14.28%,
+        var(--cempasuchil) 14.28%,     var(--cempasuchil) 28.57%,
+        var(--verde)       28.57%,     var(--verde)       42.85%,
+        var(--amarillo)    42.85%,     var(--amarillo)    57.14%,
+        var(--azul)        57.14%,     var(--azul)        71.42%,
+        var(--morado)      71.42%,     var(--morado)      85.71%,
+        var(--rojo)        85.71%,     var(--rojo)        100%
+      );
+      clip-path: polygon(
+        0 0, 1.5% 100%, 3% 0, 4.5% 100%, 6% 0, 7.5% 100%, 9% 0,
+        10.5% 100%, 12% 0, 13.5% 100%, 15% 0, 16.5% 100%, 18% 0,
+        19.5% 100%, 21% 0, 22.5% 100%, 24% 0, 25.5% 100%, 27% 0,
+        28.5% 100%, 30% 0, 31.5% 100%, 33% 0, 34.5% 100%, 36% 0,
+        37.5% 100%, 39% 0, 40.5% 100%, 42% 0, 43.5% 100%, 45% 0,
+        46.5% 100%, 48% 0, 49.5% 100%, 51% 0, 52.5% 100%, 54% 0,
+        55.5% 100%, 57% 0, 58.5% 100%, 60% 0, 61.5% 100%, 63% 0,
+        64.5% 100%, 66% 0, 67.5% 100%, 69% 0, 70.5% 100%, 72% 0,
+        73.5% 100%, 75% 0, 76.5% 100%, 78% 0, 79.5% 100%, 81% 0,
+        82.5% 100%, 84% 0, 85.5% 100%, 87% 0, 88.5% 100%, 90% 0,
+        91.5% 100%, 93% 0, 94.5% 100%, 96% 0, 97.5% 100%, 100% 0
+      );
     }
 
     /* ── Storage bar ── */
     .storage-bar {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,149,0,0.2);
       border-radius: 12px;
       padding: 12px 20px;
       display: flex;
@@ -52,19 +103,19 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #2ecc71;
+      background: var(--verde);
+      box-shadow: 0 0 8px var(--verde);
       flex-shrink: 0;
     }
 
     .storage-info {
       flex: 1;
       font-size: 0.9rem;
-      color: #aaa;
+      color: #c0a080;
     }
-
     .storage-info span {
-      color: #666;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      color: #70503a;
       margin-left: 8px;
     }
 
@@ -75,28 +126,22 @@
       border-radius: 8px;
       padding: 8px 16px;
       font-size: 0.9rem;
-      font-weight: 600;
+      font-weight: 700;
       transition: opacity 0.2s, transform 0.1s;
     }
-    button:hover { opacity: 0.85; }
+    button:hover  { opacity: 0.82; }
     button:active { transform: scale(0.97); }
 
-    .btn-primary   { background: #e94560; color: #fff; }
-    .btn-secondary { background: rgba(255,255,255,0.1); color: #e0e0e0; }
-    .btn-ghost     { background: rgba(255,255,255,0.06); color: #aaa; }
-    .btn-danger {
-      background: rgba(233,69,96,0.2);
-      color: #e94560;
-      padding: 4px 8px;
-      font-size: 0.8rem;
-    }
-    .btn-small { padding: 6px 12px; font-size: 0.85rem; }
+    .btn-primary   { background: var(--rosa); color: #fff; }
+    .btn-ghost     { background: rgba(255,255,255,0.06); color: #c0a080; border: 1px solid rgba(255,255,255,0.1); }
+    .btn-danger    { background: rgba(198,40,40,0.25); color: #ff6b6b; padding: 5px 10px; font-size: 0.8rem; }
+    .btn-small     { padding: 6px 12px; font-size: 0.85rem; }
 
     /* ── Stats ── */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 24px;
     }
     @media (max-width: 600px) {
@@ -104,43 +149,70 @@
     }
 
     .stat-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 16px;
+      border-radius: 14px;
+      padding: 18px 14px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid;
     }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.1;
+      background: currentColor;
+    }
+
+    .stat-total     { color: var(--azul);        border-color: rgba(21,101,192,0.4); }
+    .stat-confirmed { color: var(--verde);        border-color: rgba(0,166,81,0.4);  }
+    .stat-pending   { color: var(--cempasuchil);  border-color: rgba(255,149,0,0.4); }
+    .stat-collected { color: var(--rosa);         border-color: rgba(233,30,140,0.4);}
 
     .stat-label {
-      font-size: 0.75rem;
-      color: #888;
+      font-size: 0.68rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      letter-spacing: 1px;
+      opacity: 0.85;
+      margin-bottom: 10px;
+      position: relative;
     }
-
-    .stat-value { font-size: 1.8rem; font-weight: 700; }
-    .stat-total     .stat-value { color: #a29bfe; }
-    .stat-confirmed .stat-value { color: #2ecc71; }
-    .stat-pending   .stat-value { color: #f39c12; }
-    .stat-collected .stat-value { color: #e94560; font-size: 1.3rem; }
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: 900;
+      position: relative;
+      line-height: 1;
+    }
+    .stat-collected .stat-value { font-size: 1.3rem; }
 
     /* ── Section cards ── */
     .section-card {
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.035);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
     }
+    .section-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+    #guests-section::before { background: linear-gradient(90deg, var(--verde), var(--azul)); }
+    #config-section::before { background: linear-gradient(90deg, var(--cempasuchil), var(--rosa)); }
 
     .section-title {
       font-size: 1.1rem;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text);
     }
 
     /* ── Add row ── */
@@ -156,12 +228,12 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 8px;
       padding: 8px 12px;
-      color: #e0e0e0;
+      color: var(--text);
       font-size: 0.9rem;
       outline: none;
       transition: border-color 0.2s;
     }
-    .add-row input[type="text"]:focus { border-color: #e94560; }
+    .add-row input[type="text"]:focus { border-color: var(--rosa); }
 
     /* ── Lists ── */
     .guest-list, .insumo-list {
@@ -175,15 +247,14 @@
       align-items: center;
       gap: 10px;
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: 10px;
       padding: 10px 14px;
       transition: background 0.2s, border-color 0.2s;
     }
-
     .guest-item.confirmed {
-      background: rgba(46,204,113,0.08);
-      border-color: rgba(46,204,113,0.2);
+      background: rgba(0,166,81,0.09);
+      border-color: rgba(0,166,81,0.3);
     }
 
     .guest-name, .insumo-name { flex: 1; font-size: 0.9rem; }
@@ -196,9 +267,7 @@
       flex-shrink: 0;
     }
     .custom-checkbox input {
-      opacity: 0;
-      width: 0;
-      height: 0;
+      opacity: 0; width: 0; height: 0;
       position: absolute;
     }
     .checkmark {
@@ -209,22 +278,21 @@
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .custom-checkbox input:checked ~ .checkmark {
-      background: #2ecc71;
-      border-color: #2ecc71;
+      background: var(--verde);
+      border-color: var(--verde);
     }
     .checkmark::after {
       content: '';
       display: none;
+      position: absolute;
+      left: 5px; top: 2px;
       width: 5px; height: 9px;
       border: 2px solid #fff;
       border-top: none;
       border-left: none;
-      transform: rotate(45deg) translate(-1px, -1px);
+      transform: rotate(45deg);
     }
     .custom-checkbox input:checked ~ .checkmark::after { display: block; }
 
@@ -235,12 +303,12 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 6px;
       padding: 4px 8px;
-      color: #e0e0e0;
+      color: var(--text);
       font-size: 0.85rem;
       text-align: center;
       outline: none;
     }
-    .insumo-qty:focus { border-color: #f39c12; }
+    .insumo-qty:focus { border-color: var(--cempasuchil); }
 
     /* ── Config grid ── */
     .config-grid {
@@ -256,10 +324,11 @@
     .config-field.full-width { grid-column: 1 / -1; }
 
     .config-label {
-      font-size: 0.75rem;
-      color: #888;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
 
     .config-input {
@@ -267,39 +336,41 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 8px;
       padding: 8px 12px;
-      color: #e0e0e0;
+      color: var(--text);
       font-size: 0.9rem;
       font-family: inherit;
       outline: none;
       transition: border-color 0.2s;
     }
-    .config-input:focus { border-color: #a29bfe; }
+    .config-input:focus { border-color: var(--cempasuchil); }
     textarea.config-input { resize: vertical; min-height: 80px; }
 
-    /* ── Recaudado box ── */
+    /* ── Recaudado ── */
     .recaudado-box {
-      background: rgba(233,69,96,0.1);
-      border: 1px solid rgba(233,69,96,0.3);
-      border-radius: 10px;
-      padding: 14px;
+      background: linear-gradient(135deg, rgba(233,30,140,0.14), rgba(255,149,0,0.08));
+      border: 1px solid rgba(233,30,140,0.35);
+      border-radius: 12px;
+      padding: 16px;
       text-align: center;
-      margin-top: 16px;
+      margin-top: 18px;
     }
-    .recaudado-formula { font-size: 0.85rem; color: #aaa; margin-bottom: 4px; }
-    .recaudado-total   { font-size: 1.5rem; font-weight: 700; color: #e94560; }
+    .recaudado-formula { font-size: 0.85rem; color: #c0a080; margin-bottom: 6px; }
+    .recaudado-total   { font-size: 1.7rem; font-weight: 900; color: var(--rosa); }
 
-    /* ── Insumos subsection ── */
+    /* ── Insumos sub ── */
     .insumos-sub {
       margin-top: 24px;
       border-top: 1px solid rgba(255,255,255,0.08);
       padding-top: 20px;
     }
 
+    /* ── Danger zone ── */
+    .danger-zone { margin-top: 12px; text-align: right; }
+
     /* ── Toast ── */
     #toast-container {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 24px; right: 24px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -307,18 +378,18 @@
     }
 
     .toast {
-      background: rgba(30,30,50,0.95);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(45,10,0,0.97);
+      border: 1px solid rgba(255,149,0,0.35);
+      border-left: 3px solid var(--cempasuchil);
       border-radius: 10px;
       padding: 10px 16px;
       font-size: 0.85rem;
-      color: #e0e0e0;
+      color: var(--text);
       animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
       max-width: 280px;
     }
-
     @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
+      from { transform: translateX(110%); opacity: 0; }
       to   { transform: translateX(0);    opacity: 1; }
     }
     @keyframes fadeOut {
@@ -327,24 +398,20 @@
 
     .empty-state {
       text-align: center;
-      color: #555;
+      color: #604030;
       font-size: 0.85rem;
       padding: 20px;
-    }
-
-    /* ── Danger zone ── */
-    .danger-zone {
-      margin-top: 8px;
-      text-align: right;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Heinbergo System</h1>
+    <h1>&#x1F389; Heinbergo System</h1>
     <p>Organizador de Eventos</p>
   </header>
+
+  <div class="papel-picado"></div>
 
   <!-- Storage bar -->
   <div class="storage-bar">
@@ -378,7 +445,7 @@
     </div>
   </div>
 
-  <!-- Guests -->
+  <!-- Invitados -->
   <div class="section-card" id="guests-section">
     <div class="section-title">&#x1F465; Invitados</div>
     <div class="add-row">
@@ -419,7 +486,6 @@
       <div class="recaudado-total" id="recaudado-total">$0</div>
     </div>
 
-    <!-- Insumos -->
     <div class="insumos-sub">
       <div class="section-title">&#x1F4E6; Insumos</div>
       <div class="add-row">
@@ -429,7 +495,6 @@
       <div class="insumo-list" id="insumo-list"></div>
     </div>
 
-    <!-- Borrar todo -->
     <div class="danger-zone">
       <button class="btn-danger" id="btn-reset">&#x1F5D1; Borrar todo</button>
     </div>
@@ -438,42 +503,32 @@
   <div id="toast-container"></div>
 
   <script>
-    // ══════════════════════════════════════════
-    // localStorage
-    // ══════════════════════════════════════════
     const LS_KEY = 'heinbergo_data';
 
     function loadData() {
       try {
         const raw = localStorage.getItem(LS_KEY);
-        if (!raw) return null;
-        return JSON.parse(raw);
+        return raw ? JSON.parse(raw) : null;
       } catch (_) { return null; }
     }
 
     function saveData() {
       localStorage.setItem(LS_KEY, JSON.stringify(appData));
-      const now = new Date();
-      document.getElementById('last-saved').textContent =
-        '· guardado ' + now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+      const t = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('last-saved').textContent = '\u00b7 guardado ' + t;
     }
 
-    // ══════════════════════════════════════════
-    // Estado
-    // ══════════════════════════════════════════
     let appData = {
       guests:  [],
       config:  { evento: '', fecha: '', importe: '', lugar: '', notas: '' },
       insumos: []
     };
 
-    // ══════════════════════════════════════════
-    // Render
-    // ══════════════════════════════════════════
+    // ── Render ──
     function renderGuests() {
       const list = document.getElementById('guest-list');
-      if (appData.guests.length === 0) {
-        list.innerHTML = '<div class="empty-state">No hay invitados a&#xFA;n</div>';
+      if (!appData.guests.length) {
+        list.innerHTML = '<div class="empty-state">A\u00fan no hay invitados \u{1F389}</div>';
         return;
       }
       list.innerHTML = appData.guests.map((g, i) => `
@@ -491,8 +546,8 @@
 
     function renderInsumos() {
       const list = document.getElementById('insumo-list');
-      if (appData.insumos.length === 0) {
-        list.innerHTML = '<div class="empty-state">No hay insumos a&#xFA;n</div>';
+      if (!appData.insumos.length) {
+        list.innerHTML = '<div class="empty-state">A\u00fan no hay insumos</div>';
         return;
       }
       list.innerHTML = appData.insumos.map((ins, i) => `
@@ -515,15 +570,14 @@
       document.getElementById('stat-total').textContent     = total;
       document.getElementById('stat-confirmed').textContent = confirmed;
       document.getElementById('stat-pending').textContent   = pending;
-      document.getElementById('stat-collected').textContent = fmtCurrency(collected);
-
+      document.getElementById('stat-collected').textContent = fmt(collected);
       document.getElementById('recaudado-formula').textContent =
         `${confirmed} confirmados \u00d7 $${importe.toLocaleString('es-AR')}`;
-      document.getElementById('recaudado-total').textContent = fmtCurrency(collected);
+      document.getElementById('recaudado-total').textContent = fmt(collected);
     }
 
     function renderConfig() {
-      ['evento', 'fecha', 'importe', 'lugar', 'notas'].forEach(k => {
+      ['evento','fecha','importe','lugar','notas'].forEach(k => {
         document.getElementById('cfg-' + k).value = appData.config[k] || '';
       });
     }
@@ -535,9 +589,7 @@
       updateStats();
     }
 
-    // ══════════════════════════════════════════
-    // Acciones
-    // ══════════════════════════════════════════
+    // ── Acciones ──
     function toggleGuest(i, checked) {
       appData.guests[i].checked = checked;
       saveData(); renderAll();
@@ -551,24 +603,24 @@
     }
 
     function addGuest() {
-      const input = document.getElementById('new-guest');
-      const name  = input.value.trim();
+      const inp  = document.getElementById('new-guest');
+      const name = inp.value.trim();
       if (!name) return;
       if (appData.guests.some(g => g.name.toLowerCase() === name.toLowerCase())) {
-        showToast('Ese invitado ya existe'); return;
+        showToast('Ese invitado ya existe \u{1F914}'); return;
       }
       appData.guests.push({ name, checked: false });
-      input.value = '';
+      inp.value = '';
       saveData(); renderAll();
-      showToast(`"${name}" agregado`);
+      showToast(`\u{1F389} "${name}" agregado`);
     }
 
     function addInsumo() {
-      const input = document.getElementById('new-insumo');
-      const name  = input.value.trim();
+      const inp  = document.getElementById('new-insumo');
+      const name = inp.value.trim();
       if (!name) return;
       appData.insumos.push({ name, qty: '0' });
-      input.value = '';
+      inp.value = '';
       saveData(); renderAll();
       showToast(`"${name}" agregado`);
     }
@@ -585,45 +637,35 @@
       saveData(); updateStats();
     }
 
-    // Config en tiempo real
-    ['evento', 'fecha', 'importe', 'lugar', 'notas'].forEach(k => {
+    ['evento','fecha','importe','lugar','notas'].forEach(k => {
       document.getElementById('cfg-' + k).addEventListener('input', function () {
         appData.config[k] = this.value;
         saveData(); updateStats();
       });
     });
 
-    // Enter para agregar
     document.getElementById('new-guest').addEventListener('keydown',  e => { if (e.key === 'Enter') addGuest(); });
     document.getElementById('new-insumo').addEventListener('keydown', e => { if (e.key === 'Enter') addInsumo(); });
     document.getElementById('btn-add-guest').addEventListener('click',  addGuest);
     document.getElementById('btn-add-insumo').addEventListener('click', addInsumo);
 
-    // Borrar todo
     document.getElementById('btn-reset').addEventListener('click', () => {
-      if (!confirm('\u00bfBorrar todos los datos? Esta acci\u00f3n no se puede deshacer.')) return;
-      appData = {
-        guests:  [],
-        config:  { evento: '', fecha: '', importe: '', lugar: '', notas: '' },
-        insumos: []
-      };
+      if (!confirm('\u00bfBorrar todos los datos? No se puede deshacer.')) return;
+      appData = { guests: [], config: { evento:'', fecha:'', importe:'', lugar:'', notas:'' }, insumos: [] };
       saveData(); renderAll();
-      showToast('Datos borrados');
+      showToast('\u{1F5D1} Datos borrados');
     });
 
-    // ══════════════════════════════════════════
-    // Exportar / Importar JSON
-    // ══════════════════════════════════════════
+    // ── Exportar / Importar ──
     document.getElementById('btn-export').addEventListener('click', () => {
       const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
       const url  = URL.createObjectURL(blob);
       const a    = document.createElement('a');
-      const name = (appData.config.evento || 'heinbergo') + '.json';
-      a.href = url;
-      a.download = name;
+      a.href     = url;
+      a.download = (appData.config.evento || 'heinbergo') + '.json';
       a.click();
       URL.revokeObjectURL(url);
-      showToast('Exportado: ' + name);
+      showToast('\u2713 Exportado correctamente');
     });
 
     document.getElementById('btn-import').addEventListener('click', () => {
@@ -636,23 +678,20 @@
       const reader = new FileReader();
       reader.onload = e => {
         try {
-          const imported = JSON.parse(e.target.result);
-          if (!imported.guests || !imported.config || !imported.insumos)
-            throw new Error('Formato incorrecto');
-          appData = imported;
+          const imp = JSON.parse(e.target.result);
+          if (!imp.guests || !imp.config || !imp.insumos) throw new Error('Formato inv\u00e1lido');
+          appData = imp;
           saveData(); renderAll();
-          showToast('Importado: ' + file.name);
+          showToast('\u2713 Importado: ' + file.name);
         } catch (err) {
-          showToast('Error al importar: ' + err.message);
+          showToast('\u26a0 Error: ' + err.message);
         }
       };
       reader.readAsText(file);
       this.value = '';
     });
 
-    // ══════════════════════════════════════════
-    // Utils
-    // ══════════════════════════════════════════
+    // ── Utils ──
     function showToast(msg) {
       const c = document.getElementById('toast-container');
       const t = document.createElement('div');
@@ -662,21 +701,15 @@
       setTimeout(() => t.remove(), 3100);
     }
 
-    function fmtCurrency(v) {
-      return '$' + v.toLocaleString('es-AR');
-    }
+    function fmt(v) { return '$' + v.toLocaleString('es-AR'); }
 
     function esc(str) {
       return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // ══════════════════════════════════════════
-    // Init
-    // ══════════════════════════════════════════
+    // ── Init ──
     const saved = loadData();
     if (saved) appData = saved;
     renderAll();
